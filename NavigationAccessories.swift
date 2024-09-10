@@ -19,7 +19,7 @@ extension View {
     }
     
     nonisolated func navigationLargeTitleAccessoryView<Content: View>(
-        alignsToBaseline: Bool = false,
+        alignsToBaseline: Bool = true,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
         transformPreference(NavigationAccessoriesKey.self) { value in
@@ -46,9 +46,9 @@ extension View {
     }
     
     nonisolated func navigationTitleView<Content: View>(
+        hidesStandardTitle: Bool = false,
         height: CGFloat? = nil,
         alignment: Alignment = .center,
-        hidesStandardTitle: Bool = true,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
         transformPreference(NavigationAccessoriesKey.self) { value in

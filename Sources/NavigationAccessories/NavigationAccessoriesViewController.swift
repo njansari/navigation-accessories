@@ -50,4 +50,19 @@ extension UIViewController {
             objc_setAssociatedObject(self, &associatedObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
+
+    public subscript<Content: View>(
+        hostingControllerForID id: String,
+        withContentType _: Content.Type = Content.self
+    ) -> UIHostingController<Content>? {
+        get {
+            hostingControllers[id] as? UIHostingController<Content>
+        } set {
+            if let newValue {
+                hostingControllers[id] = newValue
+            } else {
+                hostingControllers.removeValue(forKey: id)
+            }
+        }
+    }
 }

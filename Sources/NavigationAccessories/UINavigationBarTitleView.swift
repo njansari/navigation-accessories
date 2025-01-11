@@ -38,10 +38,6 @@ class UINavigationBarTitleView: UIView {
         titleView?.perform(setHeightSelector, with: height)
     }
 
-    override var subviews: [UIView] {
-        titleView?.subviews ?? super.subviews
-    }
-
     override func addSubview(_ view: UIView) {
         titleView?.addSubview(view)
     }

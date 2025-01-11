@@ -13,7 +13,7 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
         switch reason {
         case .added:
             let hostingController = UIHostingController(rootView: content)
-            viewController.hostingControllers[id] = hostingController
+            viewController[hostingControllerForID: id] = hostingController
 
             if let contentView = hostingController.view {
                 contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -35,7 +35,7 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
             }
 
         case .modified:
-            let hostingController = viewController.hostingControllers[id] as? UIHostingController<Content>
+            let hostingController: UIHostingController<Content>? = viewController[hostingControllerForID: id]
             hostingController?.rootView = content
 
             if let contentView = hostingController?.view {
@@ -52,7 +52,7 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
 
         case .removed:
             navigationItem?.tallTitleView = nil
-            viewController.hostingControllers[id] = nil
+            viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }
 }

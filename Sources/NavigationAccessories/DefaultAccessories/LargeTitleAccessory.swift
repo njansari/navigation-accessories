@@ -12,7 +12,7 @@ struct LargeTitleAccessory<Content: Hashable & View>: NavigationAccessory {
         switch reason {
         case .added:
             let hostingController = UIHostingController(rootView: content)
-            viewController.hostingControllers[id] = hostingController
+            viewController[hostingControllerForID: id] = hostingController
 
             if let contentView = hostingController.view {
                 contentView.backgroundColor = nil
@@ -22,14 +22,14 @@ struct LargeTitleAccessory<Content: Hashable & View>: NavigationAccessory {
             navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
 
         case .modified:
-            let hostingController = viewController.hostingControllers[id] as? UIHostingController<Content>
+            let hostingController: UIHostingController<Content>? = viewController[hostingControllerForID: id]
             hostingController?.rootView = content
 
             navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
 
         case .removed:
             navigationItem?.largeTitleAccessoryView = nil
-            viewController.hostingControllers[id] = nil
+            viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }
 }

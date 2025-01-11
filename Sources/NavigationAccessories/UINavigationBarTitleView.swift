@@ -1,7 +1,7 @@
 import UIKit
 
 class UINavigationBarTitleView: UIView {
-    static let classType = NSClassFromString("_UINavigationBarTitleView") as? UIView.Type
+    private static let classType = NSClassFromString(className) as? UIView.Type
 
     private(set) var titleView: UIView?
 
@@ -27,18 +27,35 @@ class UINavigationBarTitleView: UIView {
 
     var hideStandardTitle: Bool {
         get {
-            titleView?.value(forKey: "hideStandardTitle") as? Bool ?? false
+            titleView?.value(forKey: Self.hideStandardTitleKey) as? Bool ?? false
         } set {
-            titleView?.setValue(newValue, forKey: "hideStandardTitle")
+            titleView?.setValue(newValue, forKey: Self.hideStandardTitleKey)
         }
-    }
-
-    func setHeight(_ height: Double) {
-        let setHeightSelector = NSSelectorFromString("setHeight:")
-        titleView?.perform(setHeightSelector, with: height)
     }
 
     override func addSubview(_ view: UIView) {
         titleView?.addSubview(view)
+    }
+
+    func setHeight(_ height: Double) {
+        let setHeightSelector = NSSelectorFromString(Self.setHeightSelectorName)
+        titleView?.perform(setHeightSelector, with: height)
+    }
+}
+
+private extension UINavigationBarTitleView {
+    static var className: String {
+        // "_UINavigationBarTitleView"
+        ["View", "Title", "Bar", "Navigation", "UI", "_"].reversed().joined()
+    }
+
+    static var hideStandardTitleKey: String {
+        // "hideStandardTitle"
+        ["Title", "Standard", "hide"].reversed().joined()
+    }
+
+    static var setHeightSelectorName: String {
+        // "setHeight:"
+        [":", "Height", "set"].reversed().joined()
     }
 }

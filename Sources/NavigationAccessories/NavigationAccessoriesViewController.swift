@@ -40,20 +40,20 @@ class NavigationAccessoriesViewController: UIViewController {
     }
 }
 
-@MainActor private var associatedObjectHandle: UInt8 = 0
+@MainActor private var associatedObjectKey: UInt8 = 0
 
 extension UIViewController {
     var hostingControllers: [String: Any] {
         get {
-            objc_getAssociatedObject(self, &associatedObjectHandle) as? [String: Any] ?? [:]
+            objc_getAssociatedObject(self, &associatedObjectKey) as? [String: Any] ?? [:]
         } set {
-            objc_setAssociatedObject(self, &associatedObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &associatedObjectKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
 
     public subscript<Content: View>(
         hostingControllerForID id: String,
-        withContentType _: Content.Type = Content.self
+        withContentType contentType: Content.Type = Content.self
     ) -> UIHostingController<Content>? {
         get {
             hostingControllers[id] as? UIHostingController<Content>

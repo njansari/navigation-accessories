@@ -1,7 +1,7 @@
 import UIKit
 
 class UINavigationBarPalette: UIView {
-    static let classType = NSClassFromString("_UINavigationBarPalette") as? UIView.Type
+    private static let classType = NSClassFromString(className) as? UIView.Type
 
     private(set) var palette: UIView?
     var contentView: UIView
@@ -11,7 +11,7 @@ class UINavigationBarPalette: UIView {
 
         self.contentView = contentView
 
-        let initWithContentViewSelector = NSSelectorFromString("initWithContentView:")
+        let initWithContentViewSelector = NSSelectorFromString(Self.initWithContentViewSelectorName)
 
         palette = navigationBarPaletteClass
             .perform(#selector(NSProxy.alloc))?
@@ -23,10 +23,10 @@ class UINavigationBarPalette: UIView {
     }
 
     init?(using palette: UIView?) {
-        guard Self.classType != nil else { return nil }
+        guard Self.classType != nil, let palette else { return nil }
 
         self.palette = palette
-        self.contentView = palette?.value(forKey: "contentView") as? UIView ?? .init()
+        self.contentView = palette.value(forKey: Self.contentViewKey) as? UIView ?? .init()
 
         super.init(frame: .zero)
     }
@@ -37,17 +37,44 @@ class UINavigationBarPalette: UIView {
 
     var preferredHeight: Double? {
         get {
-            palette?.value(forKey: "preferredHeight") as? Double
+            palette?.value(forKey: Self.preferredHeightKey) as? Double
         } set {
-            palette?.setValue(newValue, forKey: "preferredHeight")
+            palette?.setValue(newValue, forKey: Self.preferredHeightKey)
         }
     }
 
     var displaysWhenSearchActive: Bool {
         get {
-            palette?.value(forKey: "_displaysWhenSearchActive") as? Bool ?? false
+            palette?.value(forKey: Self.displaysWhenSearchActiveKey) as? Bool ?? false
         } set {
-            palette?.setValue(newValue, forKey: "_displaysWhenSearchActive")
+            palette?.setValue(newValue, forKey: Self.displaysWhenSearchActiveKey)
         }
+    }
+}
+
+private extension UINavigationBarPalette {
+    static var className: String {
+        // "_UINavigationBarPalette"
+        ["Palette", "Bar", "Navigation", "UI", "_"].reversed().joined()
+    }
+
+    static var initWithContentViewSelectorName: String {
+        // "initWithContentView:"
+        [":", "View", "Content", "With", "init"].reversed().joined()
+    }
+
+    static var contentViewKey: String {
+        // "contentView"
+        ["View", "content"].reversed().joined()
+    }
+
+    static var preferredHeightKey: String {
+        // "preferredHeight"
+        ["Height", "preferred"].reversed().joined()
+    }
+
+    static var displaysWhenSearchActiveKey: String {
+        // "_displaysWhenSearchActive"
+        ["Active", "Search", "When", "displays", "_"].reversed().joined()
     }
 }

@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct LargeTitleAccessory<Content: Hashable & View>: NavigationAccessory {
-    let id = "LargeTitleAccessory"
+struct LargeTitleAccessoryViewAccessory<Content: Hashable & View>: NavigationAccessory {
+    let id = "LargeTitleAccessoryViewAccessory"
 
     let alignsToBaseline: Bool
     let content: Content

@@ -19,20 +19,17 @@ struct LargeTitleAccessory<Content: Hashable & View>: NavigationAccessory {
                 navigationItem?.largeTitleAccessoryView = contentView
             }
 
+            navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
+
         case .modified:
             let hostingController = viewController.hostingControllers[id] as? UIHostingController<Content>
             hostingController?.rootView = content
 
-            if let contentView = hostingController?.view {
-                contentView.backgroundColor = nil
-                navigationItem?.largeTitleAccessoryView = contentView
-            }
+            navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
 
         case .removed:
+            navigationItem?.largeTitleAccessoryView = nil
             viewController.hostingControllers[id] = nil
-            navigationItem?.largeTitleAccessoryView	= nil
         }
-
-        navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
     }
 }

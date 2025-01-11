@@ -39,26 +39,20 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
             hostingController?.rootView = content
 
             if let contentView = hostingController?.view {
-                contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-                contentView.backgroundColor = nil
-
                 let targetSize = CGSize(
                     width: viewController.view.frame.width,
                     height: UIView.layoutFittingCompressedSize.height
                 )
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
-
-                navigationItem?.tallTitleView?.subviews.forEach { $0.removeFromSuperview() }
-                navigationItem?.tallTitleView?.addSubview(contentView)
-
-                navigationItem?.tallTitleView?.hideStandardTitle = hideStandardTitle
                 navigationItem?.tallTitleView?.setHeight(viewHeight)
             }
 
+            navigationItem?.tallTitleView?.hideStandardTitle = hideStandardTitle
+
         case .removed:
-            viewController.hostingControllers[id] = nil
             navigationItem?.tallTitleView = nil
+            viewController.hostingControllers[id] = nil
         }
     }
 }

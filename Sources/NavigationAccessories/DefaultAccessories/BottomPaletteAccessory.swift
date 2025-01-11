@@ -37,8 +37,6 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
             hostingController?.rootView = content
 
             if let contentView = hostingController?.view {
-                contentView.backgroundColor = nil
-
                 let targetSize = CGSize(
                     width: viewController.view.frame.width,
                     height: UIView.layoutFittingCompressedSize.height
@@ -46,14 +44,14 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
 
-                navigationItem?.bottomPalette?.contentView = contentView
-                navigationItem?.bottomPalette?.displaysWhenSearchActive = displaysWhenSearchActive
                 navigationItem?.bottomPalette?.preferredHeight = viewHeight
             }
 
+            navigationItem?.bottomPalette?.displaysWhenSearchActive = displaysWhenSearchActive
+
         case .removed:
-            viewController.hostingControllers[id] = nil
             navigationItem?.bottomPalette = nil
+            viewController.hostingControllers[id] = nil
         }
     }
 }

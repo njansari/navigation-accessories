@@ -8,7 +8,7 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
     let content: Content
 
     func update(in viewController: UIViewController, reason: NavigationAccessoryUpdateReason) {
-        let navigationItem = viewController.navigationController?.topViewController?.navigationItem
+        let navigationItem = viewController.navigationItem
 
         switch reason {
         case .added:
@@ -31,7 +31,7 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
                 titleView?.setHeight(viewHeight)
                 titleView?.addSubview(contentView)
 
-                navigationItem?.tallTitleView = titleView
+                navigationItem.tallTitleView = titleView
             }
 
         case .modified:
@@ -45,13 +45,13 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
                 )
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
-                navigationItem?.tallTitleView?.setHeight(viewHeight)
+                navigationItem.tallTitleView?.setHeight(viewHeight)
             }
 
-            navigationItem?.tallTitleView?.hideStandardTitle = hideStandardTitle
+            navigationItem.tallTitleView?.hideStandardTitle = hideStandardTitle
 
         case .removed:
-            navigationItem?.tallTitleView = nil
+            navigationItem.tallTitleView = nil
             viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }

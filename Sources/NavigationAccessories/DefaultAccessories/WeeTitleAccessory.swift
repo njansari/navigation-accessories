@@ -5,6 +5,11 @@ struct WeeTitleAccessory: NavigationAccessory {
     let title: String?
 
     func update(in viewController: UIViewController, reason: NavigationAccessoryUpdateReason) {
-        viewController.navigationController?.topViewController?.navigationItem.weeTitle = title
+        switch reason {
+        case .added, .modified:
+            viewController.navigationItem.weeTitle = title
+        case .removed:
+            viewController.navigationItem.weeTitle = nil
+        }
     }
 }

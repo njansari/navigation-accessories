@@ -7,7 +7,7 @@ struct LargeTitleAccessoryViewAccessory<Content: Hashable & View>: NavigationAcc
     let content: Content
 
     func update(in viewController: UIViewController, reason: NavigationAccessoryUpdateReason) {
-        let navigationItem = viewController.navigationController?.topViewController?.navigationItem
+        let navigationItem = viewController.navigationItem
 
         switch reason {
         case .added:
@@ -16,19 +16,19 @@ struct LargeTitleAccessoryViewAccessory<Content: Hashable & View>: NavigationAcc
 
             if let contentView = hostingController.view {
                 contentView.backgroundColor = nil
-                navigationItem?.largeTitleAccessoryView = contentView
+                navigationItem.largeTitleAccessoryView = contentView
             }
 
-            navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
+            navigationItem.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
 
         case .modified:
             let hostingController: UIHostingController<Content>? = viewController[hostingControllerForID: id]
             hostingController?.rootView = content
 
-            navigationItem?.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
+            navigationItem.alignLargeTitleAccessoryViewToBaseline = alignsToBaseline
 
         case .removed:
-            navigationItem?.largeTitleAccessoryView = nil
+            navigationItem.largeTitleAccessoryView = nil
             viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }

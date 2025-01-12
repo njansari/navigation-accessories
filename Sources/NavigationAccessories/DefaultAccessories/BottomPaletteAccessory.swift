@@ -8,7 +8,7 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
     let content: Content
 
     func update(in viewController: UIViewController, reason: NavigationAccessoryUpdateReason) {
-        let navigationItem = viewController.navigationController?.topViewController?.navigationItem
+        let navigationItem = viewController.navigationItem
 
         switch reason {
         case .added:
@@ -29,7 +29,7 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
                 palette?.displaysWhenSearchActive = displaysWhenSearchActive
                 palette?.preferredHeight = viewHeight
 
-                navigationItem?.bottomPalette = palette
+                navigationItem.bottomPalette = palette
             }
 
         case .modified:
@@ -44,13 +44,13 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
 
-                navigationItem?.bottomPalette?.preferredHeight = viewHeight
+                navigationItem.bottomPalette?.preferredHeight = viewHeight
             }
 
-            navigationItem?.bottomPalette?.displaysWhenSearchActive = displaysWhenSearchActive
+            navigationItem.bottomPalette?.displaysWhenSearchActive = displaysWhenSearchActive
 
         case .removed:
-            navigationItem?.bottomPalette = nil
+            navigationItem.bottomPalette = nil
             viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }

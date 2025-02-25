@@ -4,11 +4,15 @@ class UINavigationBarTitleView: UIView {
     private static let classType = NSClassFromString(className) as? UIView.Type
 
     private(set) var titleView: UIView?
+    private(set) var contentView: UIView?
 
-    init?(_: Bool = true) {
+    init?(contentView: UIView) {
         guard let titleViewClass = Self.classType else { return nil }
 
-        titleView = titleViewClass.init()
+        self.contentView = contentView
+
+        self.titleView = titleViewClass.init()
+        titleView?.addSubview(contentView)
 
         super.init(frame: .zero)
     }
@@ -17,6 +21,7 @@ class UINavigationBarTitleView: UIView {
         guard let titleViewClass = Self.classType, titleView?.isKind(of: titleViewClass) == true else { return nil }
 
         self.titleView = titleView
+        self.contentView = titleView?.subviews.first
 
         super.init(frame: .zero)
     }
@@ -31,10 +36,6 @@ class UINavigationBarTitleView: UIView {
         } set {
             titleView?.setValue(newValue, forKey: Self.hideStandardTitleKey)
         }
-    }
-
-    override func addSubview(_ view: UIView) {
-        titleView?.addSubview(view)
     }
 
     func setHeight(_ height: Double) {

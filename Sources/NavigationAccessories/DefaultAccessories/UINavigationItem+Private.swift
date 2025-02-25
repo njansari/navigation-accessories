@@ -27,6 +27,16 @@ extension UINavigationItem {
         }
     }
 
+    var topPalette: UINavigationBarPalette? {
+        get {
+            let palette = value(forKey: Self.topPaletteKey) as? UIView
+            return UINavigationBarPalette(using: palette)
+        } set {
+            let selector = NSSelectorFromString(Self.setTopPaletteSelectorName)
+            perform(selector, with: newValue?.palette)
+        }
+    }
+
     var bottomPalette: UINavigationBarPalette? {
         get {
             let palette = value(forKey: Self.bottomPaletteKey) as? UIView
@@ -70,6 +80,16 @@ private extension UINavigationItem {
     static var alignLargeTitleAccessoryViewToBaselineKey: String {
         // "_alignLargeTitleAccessoryViewToBaseline"
         ["Baseline", "To", "View", "Accessory", "Title", "Large", "align", "_"].reversed().joined()
+    }
+
+    static var topPaletteKey: String {
+        // "_topPalette"
+        ["Palette", "top", "_"].reversed().joined()
+    }
+
+    static var setTopPaletteSelectorName: String {
+        // "_setTopPalette:"
+        [":", "Palette", "Top", "set", "_"].reversed().joined()
     }
 
     static var bottomPaletteKey: String {

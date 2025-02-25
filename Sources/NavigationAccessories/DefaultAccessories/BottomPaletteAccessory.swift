@@ -12,38 +12,32 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
 
         switch reason {
         case .added:
-            let hostingController = UIHostingController(rootView: content)
-            viewController[hostingControllerForID: id] = hostingController
+            let contentView = _UIHostingView(rootView: content)
+            contentView.backgroundColor = nil
 
-            if let contentView = hostingController.view {
-                contentView.backgroundColor = nil
+            let targetSize = CGSize(
+                width: viewController.view.frame.width,
+                height: UIView.layoutFittingCompressedSize.height
+            )
 
-                let targetSize = CGSize(
-                    width: viewController.view.frame.width,
-                    height: UIView.layoutFittingCompressedSize.height
-                )
+            let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
 
-                let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
+            let palette = UINavigationBarPalette(contentView: contentView)
+            palette?.displaysWhenSearchActive = displaysWhenSearchActive
+            palette?.preferredHeight = viewHeight
 
-                let palette = UINavigationBarPalette(contentView: contentView)
-                palette?.displaysWhenSearchActive = displaysWhenSearchActive
-                palette?.preferredHeight = viewHeight
-
-                navigationItem.bottomPalette = palette
-            }
+            navigationItem.bottomPalette = palette
 
         case .modified:
-            let hostingController: UIHostingController<Content>? = viewController[hostingControllerForID: id]
-            hostingController?.rootView = content
+            if let contentView = navigationItem.bottomPalette?.contentView as? _UIHostingView<Content> {
+                contentView.rootView = content
 
-            if let contentView = hostingController?.view {
                 let targetSize = CGSize(
                     width: viewController.view.frame.width,
                     height: UIView.layoutFittingCompressedSize.height
                 )
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
-
                 navigationItem.bottomPalette?.preferredHeight = viewHeight
             }
 
@@ -51,7 +45,6 @@ struct BottomPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
 
         case .removed:
             navigationItem.bottomPalette = nil
-            viewController[hostingControllerForID: id, withContentType: Content.self] = nil
         }
     }
 }

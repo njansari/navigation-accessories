@@ -4,20 +4,16 @@ class UINavigationBarPalette: UIView {
     private static let classType = NSClassFromString(className) as? UIView.Type
 
     private(set) var palette: UIView?
-    var contentView: UIView
+    private(set) var contentView: UIView?
 
     init?(contentView: UIView) {
         guard let navigationBarPaletteClass = Self.classType else { return nil }
 
         self.contentView = contentView
 
-        let initWithContentViewSelector = NSSelectorFromString(Self.initWithContentViewSelectorName)
-
-        palette = navigationBarPaletteClass
-            .perform(#selector(NSProxy.alloc))?
-            .takeUnretainedValue()
-            .perform(initWithContentViewSelector, with: contentView)?
-            .takeUnretainedValue() as? UIView
+        palette = navigationBarPaletteClass.init()
+        contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        palette?.addSubview(contentView)
 
         super.init(frame: .zero)
     }
@@ -26,7 +22,10 @@ class UINavigationBarPalette: UIView {
         guard Self.classType != nil, let palette else { return nil }
 
         self.palette = palette
-        self.contentView = palette.value(forKey: Self.contentViewKey) as? UIView ?? .init()
+
+        if let contentView = palette.value(forKey: Self.contentViewKey) as? UIView {
+            self.contentView = contentView.subviews.first
+        }
 
         super.init(frame: .zero)
     }
@@ -56,11 +55,6 @@ private extension UINavigationBarPalette {
     static var className: String {
         // "_UINavigationBarPalette"
         ["Palette", "Bar", "Navigation", "UI", "_"].reversed().joined()
-    }
-
-    static var initWithContentViewSelectorName: String {
-        // "initWithContentView:"
-        [":", "View", "Content", "With", "init"].reversed().joined()
     }
 
     static var contentViewKey: String {

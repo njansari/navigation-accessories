@@ -4,7 +4,9 @@ struct NavigationAccessoriesKey: PreferenceKey {
     nonisolated(unsafe) static let defaultValue: Accessories = []
 
     static func reduce(value: inout Accessories, nextValue: () -> Accessories) {
-        value = nextValue()
+        for accessory in nextValue() {
+            value.insert(accessory)
+        }
     }
 }
 

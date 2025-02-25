@@ -8,7 +8,9 @@ struct Accessories: ExpressibleByArrayLiteral, Sequence {
     }
 
     mutating func insert(_ accessory: Accessory) {
-        if !accessories.contains(where: { $0.id == accessory.id }) {
+        if let index = accessories.firstIndex(where: { $0.id == accessory.id }) {
+            accessories[index] = accessory
+        } else {
             accessories.append(accessory)
         }
     }

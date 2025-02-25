@@ -28,7 +28,29 @@ public extension View {
             )
         )
     }
-    
+
+    /// Adds a custom top palette to the navigation bar.
+    ///
+    /// Use this modifier to provide a SwiftUI view that is pinned above the title as part of the navigation bar.
+    ///
+    /// - Parameters:
+    ///   - displaysWhenSearchActive: A Boolean value indicating whether the palette should be visible when a search is active. The default is `false`.
+    ///   - height: An optional height for the palette. If `nil`, the view's default height is used.
+    ///   - content: A closure returning the view to display in the palette.
+    func navigationTopPalette<Content: View>(
+        displaysWhenSearchActive: Bool = false,
+        height: CGFloat? = nil,
+        content: () -> Content
+    ) -> some View {
+        navigationAccessory(
+            TopPaletteAccessory(
+                displaysWhenSearchActive: displaysWhenSearchActive,
+                height: height,
+                content: HashableView(content: content())
+            )
+        )
+    }
+
     /// Adds a custom bottom palette to the navigation bar.
     ///
     /// Use this modifier to provide a SwiftUI view that is pinned below the title as part of the navigation bar.

@@ -1,10 +1,10 @@
 import SwiftUI
 
-struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
-    let id = "TitleViewAccessory"
+struct TopPaletteAccessory<Content: Hashable & View>: NavigationAccessory {
+    let id = "TopPaletteAccessory"
 
+    let displaysWhenSearchActive: Bool
     let height: CGFloat?
-    let hideStandardTitle: Bool
     let content: Content
 
     func update(in viewController: UIViewController, reason: NavigationAccessoryUpdateReason) {
@@ -13,7 +13,6 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
         switch reason {
         case .added:
             let contentView = _UIHostingView(rootView: content)
-            contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
             contentView.backgroundColor = nil
 
             let targetSize = CGSize(
@@ -23,14 +22,14 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
 
             let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
 
-            let titleView = UINavigationBarTitleView(contentView: contentView)
-            titleView?.hideStandardTitle = hideStandardTitle
-            titleView?.setHeight(viewHeight)
+            let palette = UINavigationBarPalette(contentView: contentView)
+            palette?.displaysWhenSearchActive = displaysWhenSearchActive
+            palette?.preferredHeight = viewHeight
 
-            navigationItem.tallTitleView = titleView
+            navigationItem.topPalette = palette
 
         case .modified:
-            if let contentView = navigationItem.tallTitleView?.contentView as? _UIHostingView<Content> {
+            if let contentView = navigationItem.topPalette?.contentView as? _UIHostingView<Content> {
                 contentView.rootView = content
 
                 let targetSize = CGSize(
@@ -39,13 +38,13 @@ struct TitleViewAccessory<Content: Hashable & View>: NavigationAccessory {
                 )
 
                 let viewHeight = height ?? contentView.systemLayoutSizeFitting(targetSize).height
-                navigationItem.tallTitleView?.setHeight(viewHeight)
+                navigationItem.topPalette?.preferredHeight = viewHeight
             }
 
-            navigationItem.tallTitleView?.hideStandardTitle = hideStandardTitle
+            navigationItem.topPalette?.displaysWhenSearchActive = displaysWhenSearchActive
 
         case .removed:
-            navigationItem.tallTitleView = nil
+            navigationItem.topPalette = nil
         }
     }
 }

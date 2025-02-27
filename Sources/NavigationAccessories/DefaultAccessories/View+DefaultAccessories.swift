@@ -103,4 +103,11 @@ public extension View {
             }
         )
     }
+    
+    /// Applies a variable Gaussian blur to the navigation bar's background.
+    ///
+    /// - Parameter radius: The radial size of the blur. A blur is more diffuse when its radius is large.
+    func navigationBarBackgroundVariableBlur(radius: Double?) -> some View {
+        navigationAccessory(radius.map(BarBackgroundVariableBlurAccessory.init))
+    }
 }
